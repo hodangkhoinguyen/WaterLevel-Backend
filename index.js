@@ -22,7 +22,7 @@ app.use(function(req, res, next) {
 
 // No static server or /public because this server
 // is only for AJAX requests
-app.post("/query/getChart", async function(req, res, next) {
+app.post("/query/getLake", async function(req, res, next) {
   console.log(req.body);
   let month = 1, year = 2022;
   let water = await lookupWaterData(month, year);
