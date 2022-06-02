@@ -23,9 +23,9 @@ app.use(function(req, res, next) {
 // No static server or /public because this server
 // is only for AJAX requests
 app.post("/query/getLake", async function(req, res, next) {
+  let month = req.body.month, year = req.body.year;
+  let water = await lookupWaterData(month, year);  
   console.log(req.body);
-  let month = 1, year = 2022;
-  let water = await lookupWaterData(month, year);
   res.json(water);
 });
 
@@ -46,6 +46,13 @@ async function lookupWaterData(month, year) {
   const api_url =  `https://cdec.water.ca.gov/dynamicapp/req/JSONDataServlet?Stations=SHA,ORO,CLE,NML,SNL,DNP,BER&SensorNums=15&dur_code=M&Start=${year}-${month}&End=${year}-${month}`;
   // send it off
   let fetchResponse = await fetch(api_url);
-  let data = await fetchResponse.json()
-  return data;
+  let data = await fetchResponse.json();
+  let len = data.length;
+  let result = [];
+  for(let i = 0; i < len; i++){
+    result[i] = data[i].value;
+  }
+  console.log(data);
+  console.log(result);
+  return result;
 }
